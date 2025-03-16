@@ -8,22 +8,38 @@ This project provides a deployed machine learning pipeline to predict DON (Deoxy
 - API Deployment using FastAPI
 - Containerization with Docker
 - Unit Testing for Core Functionalities
+- Streamlit Web App for Real-Time Predictions (Bonus)
 
 ---
 
 ## Installation & Setup
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
-cd <repository-folder>
+git clone https://github.com/akul-bharadwaj/ML-Assignment-Hyperspectral-Imaging-Data
+cd ML-Assignment-Hyperspectral-Imaging-Data
 ```
 
-### 2. Install Dependencies
+### 2. Create a Virtual Environment
+It is recommended to create a virtual environment before installing dependencies.
+
+#### **For Linux/macOS:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+#### **For Windows PowerShell:**
+```powershell
+python -m venv venv
+venv\Scripts\Activate
+```
+
+### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run FastAPI Server
+### 4. Run FastAPI Server
 ```bash
 uvicorn src.api:app --host 0.0.0.0 --port 8000
 ```
@@ -137,6 +153,8 @@ streamlit run streamlit_app.py
 Upload a CSV file and select an `hsi_id` for prediction. The app will send a request to the FastAPI backend and display the predicted results.
 
 ---
+
+### <b>Note</b>: For some of the key data analysis and model performance visualizations, I have used [Plotly](https://plotly.com/) to make the plots interactive.
 
 ## Repository Structure
 ```
