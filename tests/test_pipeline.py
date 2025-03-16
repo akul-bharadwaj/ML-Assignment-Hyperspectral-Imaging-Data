@@ -1,6 +1,4 @@
 import unittest
-import joblib
-import cloudpickle
 import pandas as pd
 import numpy as np
 import logging
@@ -15,9 +13,6 @@ logger = logging.getLogger(__name__)
 
 # Load Models
 fnn_model = tf.keras.models.load_model("models/fnn_model.h5", compile=False)
-xgb_model = joblib.load("models/xgb_model.pkl")
-with open("models/ensemble_model.pkl", "rb") as f:
-    ensemble_model = cloudpickle.load(f)
 
 # Load dataset
 DATA_PATH = "data/new_gen_data.csv"
@@ -51,22 +46,6 @@ class TestPipeline(unittest.TestCase):
         self.assertTrue(isinstance(prediction, (float, np.float32, np.float64)))
         logger.info(f"FNN model test passed for hsi_id: {test_hsi_id}, Prediction: {prediction}")
 
-    def test_xgb_model(self):
-        """Test if XGBoost model makes a valid prediction."""
-        test_hsi_id = df.index[0]
-        features = preprocess_new_data(df.loc[test_hsi_id].values.tolist())
-        prediction = xgb_model.predict(features)[0]
-        self.assertTrue(isinstance(prediction, (float, np.float32, np.float64)))
-        logger.info(f"XGBoost model test passed for hsi_id: {test_hsi_id}, Prediction: {prediction}")
-
-    def test_ensemble_model(self):
-        """Test if Ensemble model makes a valid prediction."""
-        test_hsi_id = df.index[0]
-        features = preprocess_new_data(df.loc[test_hsi_id].values.tolist())
-        prediction = ensemble_model.predict(features)[0]
-        self.assertTrue(isinstance(prediction, (float, np.float32, np.float64)))
-        logger.info(f"Ensemble model test passed for hsi_id: {test_hsi_id}, Prediction: {prediction}")
-
     def test_api_response(self):
         """Test if FastAPI returns valid responses for all models."""
         test_hsi_id = df.index[0]
@@ -75,8 +54,6 @@ class TestPipeline(unittest.TestCase):
         data = response.json()
 
         self.assertIn("fnn_prediction", data)
-        self.assertIn("xgb_prediction", data)
-        self.assertIn("ensemble_prediction", data)
 
         logger.info(f"API response test passed for hsi_id: {test_hsi_id}, Response: {data}")
 

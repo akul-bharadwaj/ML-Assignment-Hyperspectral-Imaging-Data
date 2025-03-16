@@ -4,10 +4,11 @@
 This project provides a deployed machine learning pipeline to predict DON (Deoxynivalenol) concentration in corn samples using hyperspectral data. The pipeline includes:
 - Data Preprocessing (with data consistency checks)
 - Model Training (Jupyter Notebook)
-- Model Inference (Pre-trained Feedforward Neural Network, XGBoost, and Ensemble Model)
+- Model Inference (Pre-trained Feedforward Neural Network)
 - API Deployment using FastAPI
 - Containerization with Docker
 - Unit Testing for Core Functionalities
+- Data Generation Script for Simulated New Data
 - Streamlit Web App for Real-Time Predictions (Bonus)
 
 ---
@@ -61,8 +62,6 @@ This will output:
 {
   "hsi_id": "imagoai_corn_525",
   "fnn_prediction": 123.45,
-  "xgb_prediction": 128.76,
-  "ensemble_prediction": 126.10
 }
 ```
 
@@ -80,8 +79,6 @@ Invoke-WebRequest -Uri "http://127.0.0.1:8000/predict" -Method POST -Headers @{"
 
 The response will contain predictions from:
 - **Feedforward Neural Network (fnn_prediction)**
-- **XGBoost (xgb_prediction)**
-- **Ensemble Model (ensemble_prediction)**
 
 ---
 
@@ -121,8 +118,6 @@ The response will contain three predictions:
 ```json
 {
   "fnn_prediction": 123.45,
-  "xgb_prediction": 128.76,
-  "ensemble_prediction": 126.10
 }
 ```
 
@@ -133,7 +128,7 @@ The response will contain three predictions:
 FROM python:3.11
 WORKDIR /app
 COPY . /app
-COPY models/ /app/models/
+COPY models/fnn_model.h5 /app/models/
 COPY data/ /app/data/
 COPY generate_new_data.py /app/
 RUN pip install --no-cache-dir -r requirements.txt
@@ -150,7 +145,7 @@ The Streamlit app allows users to upload a CSV file containing spectral data and
 streamlit run streamlit_app.py
 ```
 
-Upload a CSV file and select an `hsi_id` for prediction. The app will send a request to the FastAPI backend and display the predicted results.
+Upload a CSV file and select an `hsi_id` for prediction. The app will send a request to the FastAPI backend and display the predicted result.
 
 ---
 

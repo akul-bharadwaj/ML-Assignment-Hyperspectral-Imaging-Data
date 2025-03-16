@@ -7,6 +7,7 @@ API_URL = "http://127.0.0.1:8000/predict"
 
 st.title("DON Concentration Prediction App")
 st.write("Upload a CSV file containing spectral data to get predictions.")
+st.write("Please upload the file: `data/new_gen_data.csv`")
 
 # File Upload
 uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
@@ -24,7 +25,7 @@ if uploaded_file is not None:
             if response.status_code == 200:
                 prediction = response.json()
                 st.success("Prediction Results")
-                st.json(prediction)
+                st.write(f"**FNN Prediction:** {prediction['fnn_prediction']}")
             else:
                 st.error("Error: Unable to fetch predictions.")
     else:
